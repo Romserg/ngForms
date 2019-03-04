@@ -3,17 +3,22 @@
   <form #form="ngForm" (submit)="submitForm(form)" novalidate>
     <div class="form-group" [class.has-error]="firstName.invalid && firstName.touched">
       <label class="control-label">First Name</label>
-      <input #firstName="ngModel" pattern="...+" type="text" class="form-control" name="firstName"
+      <input #firstName="ngModel" required pattern="...+" type="text" class="form-control" name="firstName"
              [(ngModel)]="model.firstName">
     </div>
 
     <div class="alert alert-danger" *ngIf="firstName.invalid && firstName.touched">
-      First Name is required, and must be at least 3 characters.
+      First Name is required.
     </div>
+
     <div class="form-group">
       <label>Last Name</label>
-      <input type="text" class="form-control" name="lastName"
+      <input #lastName="ngModel" type="text" required class="form-control" name="lastName"
              [(ngModel)]="model.lastName">
+    </div>
+
+    <div class="alert alert-danger" *ngIf="lastName.invalid && lastName.touched">
+      First Name is required.
     </div>
 
     <div class="checkbox">
