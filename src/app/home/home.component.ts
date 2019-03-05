@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Employee } from '../models/employee.module';
 import { FormPoster } from '../services/form-poster.service';
 import { NgForm } from '@angular/forms';
@@ -8,9 +8,23 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./home.component.css'],
   templateUrl: './home.component.html'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
+  private subscription;
   constructor(private formPoster: FormPoster) {}
-  languages = ["English", "Spanish", "Other"];
+
+  ngOnInit(): void {
+    this.subscription = this.formPoster.getLanguages()
+      .subscribe(
+        data => this.languages = data.languages,
+        err => console.log('get error: ', err)
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  languages = [];
   model = new Employee('', '', false, '', 'default');
   hasPrimaryLanguageError = false;
 
@@ -26,10 +40,8 @@ export class HomeComponent {
   }
 
 
+
   validatePrimaryLanguage(value) {
-    if(value === 'default')
-      this.hasPrimaryLanguageError = true;
-    else
-      this.hasPrimaryLanguageError = false;
+    this.hasPrimaryLanguageError = value === 'default';
   }
 }

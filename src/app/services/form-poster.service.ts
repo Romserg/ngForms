@@ -13,9 +13,21 @@ export class FormPoster {
     return body.fields || {};
   }
 
+  private extractLanguages(res: Response) {
+    let body = res.json();
+    return body.data || {};
+  }
+
   private handleError(error: any) {
     console.error('post error: ', error);
     return Observable.throw(error.statusText);
+  }
+
+  getLanguages(): Observable<any> {
+    return this.http.get('http://localhost:3100/get-languages')
+      .delay(500)
+      .map(this.extractLanguages)
+      .catch(this.handleError);
   }
 
 
